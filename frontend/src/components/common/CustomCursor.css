@@ -1,0 +1,40 @@
+.custom-cursor,
+.custom-cursor-follower {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 9999;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.custom-cursor {
+  width: 8px;
+  height: 8px;
+  background-color: #ffffff;
+  mix-blend-mode: difference;
+}
+
+.custom-cursor-follower {
+  width: 36px;
+  height: 36px;
+  border: 1.5px solid rgba(255, 255, 255, 0.4);
+  transition: opacity 0.3s ease;
+  will-change: transform;
+}
+
+/* Hide default cursor on global interactive elements */
+a, button, input, textarea, select, .card, .interactive {
+  cursor: none !important;
+}
+
+/* Hide custom cursor on touch devices */
+@media (pointer: coarse) {
+  .custom-cursor, .custom-cursor-follower {
+    display: none !important;
+  }
+  body, a, button, input, textarea, select, .card, .interactive {
+    cursor: auto !important;
+  }
+}

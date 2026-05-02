@@ -1,0 +1,378 @@
+.join-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+  background: var(--bg-primary);
+}
+
+/* --- Ambient Background --- */
+.join-ambient-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.join-blob {
+  position: absolute;
+  filter: blur(100px);
+  opacity: 0.15;
+  border-radius: 50%;
+  animation: blobPulse 10s infinite alternate;
+}
+
+.blob-1 {
+  width: 500px;
+  height: 500px;
+  background: var(--primary);
+  top: -10%;
+  right: -5%;
+}
+
+.blob-2 {
+  width: 400px;
+  height: 400px;
+  background: var(--secondary);
+  bottom: -10%;
+  left: -5%;
+  animation-delay: -5s;
+}
+
+@keyframes blobPulse {
+  0% {
+    transform: scale(1) translate(0, 0);
+  }
+
+  100% {
+    transform: scale(1.2) translate(30px, 30px);
+  }
+}
+
+/* --- Main Card Layout --- */
+.join-container-inner {
+  max-width: 520px;
+  width: 100%;
+  margin: 0 auto;
+  position: relative;
+  z-index: 10;
+}
+
+.join-main-card {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 28px;
+  padding: 40px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 40px 100px rgba(0, 0, 0, 0.3);
+}
+
+.card-accent-line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary), var(--secondary));
+}
+
+/* --- Header Section --- */
+.join-header {
+  margin-bottom: 32px;
+}
+
+.hub-badge {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  color: var(--primary-light);
+  background: rgba(108, 99, 255, 0.1);
+  padding: 6px 14px;
+  border-radius: 100px;
+  display: inline-block;
+  margin-bottom: 24px;
+}
+
+.inviter-meta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.inviter-avatar {
+  width: 52px;
+  height: 52px;
+  background: var(--gradient-primary);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 20px;
+  font-weight: 800;
+  box-shadow: 0 10px 20px rgba(108, 99, 255, 0.3);
+}
+
+.inviter-text p {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.inviter-text p span {
+  color: var(--text-primary);
+  font-weight: 700;
+}
+
+.inviter-text h3 {
+  font-size: 22px;
+  margin: 4px 0 0;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+/* 1. Fix the Header Text Wrapping */
+.inviter-text {
+  flex: 1;
+  /* Allows the text container to shrink */
+  min-width: 0;
+  /* Critical for flex child text wrapping */
+}
+
+.inviter-text h3 {
+  font-size: clamp(18px, 5vw, 22px);
+  /* Scales font between 18px and 22px */
+  line-height: 1.2;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  margin-top: 4px;
+}
+
+/* 2. Fix the Trip Banner (Summer in Chicago section) */
+.trip-banner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+.banner-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.trip-title {
+  font-size: clamp(16px, 4.5vw, 20px);
+  /* Responsive font scaling */
+  font-weight: 700;
+  margin: 0;
+  white-space: normal;
+  /* Allows text to wrap to next line */
+  overflow-wrap: break-word;
+  line-height: 1.3;
+}
+
+/* 3. Adjust the Spec Items for Very Small Screens */
+@media (max-width: 380px) {
+  .join-main-card {
+    padding: 24px 16px;
+    /* Reduce padding to give text more room */
+  }
+
+  .inviter-meta {
+    gap: 10px;
+  }
+
+  .inviter-avatar {
+    width: 44px;
+    height: 44px;
+    font-size: 16px;
+  }
+
+  .spec-info p {
+    font-size: 11px;
+    /* Slightly smaller text for dates/duration */
+  }
+}
+
+/* --- Trip Highlight --- */
+.join-trip-highlight {
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+  padding: 24px;
+  margin-bottom: 32px;
+}
+
+.trip-banner {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.banner-emoji {
+  font-size: 32px;
+  background: rgba(255, 255, 255, 0.05);
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 18px;
+}
+
+.trip-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.trip-location {
+  font-size: 14px;
+  color: var(--primary-light);
+  margin: 4px 0 0;
+}
+
+.trip-grid-specs {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.spec-item {
+  background: rgba(255, 255, 255, 0.03);
+  padding: 12px;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.spec-icon {
+  font-size: 18px;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.spec-info label {
+  display: block;
+  font-size: 10px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  font-weight: 700;
+}
+
+.spec-info p {
+  font-size: 12px;
+  font-weight: 700;
+  margin: 2px 0 0;
+}
+
+.ai-notice {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(108, 99, 255, 0.08);
+  padding: 14px;
+  border-radius: 14px;
+  font-size: 13px;
+  line-height: 1.4;
+  border: 1px solid rgba(108, 99, 255, 0.15);
+}
+
+/* --- Button Styling --- */
+.join-btn-premium {
+  width: 100%;
+  height: 56px;
+  background: var(--gradient-primary);
+  border: none;
+  border-radius: 16px;
+  color: white;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s;
+  box-shadow: 0 15px 30px rgba(108, 99, 255, 0.3);
+}
+
+.join-btn-premium:hover {
+  transform: translateY(-2px);
+}
+
+.join-btn-premium:active {
+  transform: translateY(0);
+}
+
+.btn-shine {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  animation: shine 3s infinite;
+}
+
+@keyframes shine {
+  to {
+    left: 200%;
+  }
+}
+
+.footer-meta {
+  margin-top: 24px;
+  text-align: center;
+}
+
+.login-hint {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+}
+
+.login-hint a {
+  color: var(--primary-light);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.security-tag {
+  font-size: 11px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+/* --- Responsive Fixes --- */
+@media (max-width: 600px) {
+  .join-main-card {
+    padding: 30px 20px;
+    border-radius: 0;
+    min-height: 100vh;
+  }
+
+  .trip-grid-specs {
+    grid-template-columns: 1fr;
+  }
+
+  .spec-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-align: left;
+    padding: 14px;
+  }
+
+  .spec-icon {
+    margin: 0;
+  }
+}
