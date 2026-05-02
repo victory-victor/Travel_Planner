@@ -20,25 +20,15 @@ app.set('trust proxy', 1);
 
 // Security middlewares
 app.use(helmet());
-
 app.use(cors({
-  origin: function (origin, callback) {
-    // allow requests with no origin (like Postman or mobile apps)
-    if (!origin) return callback(null, true);
-
-    if (allowedOrigins.includes(origin)) {
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
       return callback(null, true);
     }
-
-    console.log("❌ Blocked by CORS:", origin);
-    return callback(new Error("Not allowed by CORS"));
+    return callback(new Error('Not allowed by CORS'));
   },
-  credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"]
+  credentials: true
 }));
-
-// app.options("/*", cors());
 
 // Rate limiting
 const limiter = rateLimit({
@@ -60,17 +50,6 @@ if (process.env.NODE_ENV === 'development') {
 // Health check
 app.get('/api/health', (req, res) => {
   res.json({ success: true, message: 'WanderMind API is running!', timestamp: new Date() });
-});
-
-const { testEmailConnection } = require('./services/emailService');
-
-app.get("/test-smtp", async (req, res) => {
-  try {
-    await testEmailConnection();
-    res.send("SMTP OK");
-  } catch (err) {
-    res.status(500).send(err.message);
-  }
 });
 
 // Routes
