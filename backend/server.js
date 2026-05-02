@@ -62,6 +62,17 @@ app.get('/api/health', (req, res) => {
   res.json({ success: true, message: 'WanderMind API is running!', timestamp: new Date() });
 });
 
+const { testEmailConnection } = require('./services/emailService');
+
+app.get("/test-smtp", async (req, res) => {
+  try {
+    await testEmailConnection();
+    res.send("SMTP OK");
+  } catch (err) {
+    res.status(500).send(err.message);
+  }
+});
+
 // Routes
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/trips', require('./routes/trips'));

@@ -5,16 +5,26 @@ dns.setDefaultResultOrder("ipv4first");
 
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
-  port: 465,
-  secure: true,
+  port: 587,
+  secure: false,
+  requireTLS: true,
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS
   },
-  tls: {
-    rejectUnauthorized: false
-  }
+  connectionTimeout: 10000
 });
+
+const testEmailConnection = async () => {
+  try {
+    await transporter.verify();
+    console.log("SMTP connection OK");
+    return true;
+  } catch (err) {
+    console.error("SMTP connection failed:", err);
+    throw err;
+  }
+};
 
 const sendInvitationEmail = async ({ toEmail, inviterName, tripTitle, destination, startDate, endDate, inviteLink }) => {
   const formattedStart = new Date(startDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
@@ -128,7 +138,7 @@ const sendInvitationEmail = async ({ toEmail, inviterName, tripTitle, destinatio
   try {
     await transporter.verify();
     console.log('✅ Email transporter is ready');
-    
+
     await transporter.sendMail({
       from: process.env.EMAIL_FROM,
       to: toEmail,
@@ -142,4 +152,4 @@ const sendInvitationEmail = async ({ toEmail, inviterName, tripTitle, destinatio
   }
 };
 
-module.exports = { sendInvitationEmail };
+module.exports = { sendInvitationEmail, testEmailConnection };
