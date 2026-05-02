@@ -1,17 +1,4 @@
-const nodemailer = require('nodemailer');
-
-const createTransporter = () => {
-  return nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-      type: 'OAuth2',
-      user: process.env.GMAIL_USER,
-      clientId: process.env.GMAIL_CLIENT_ID,
-      clientSecret: process.env.GMAIL_CLIENT_SECRET,
-      refreshToken: process.env.GMAIL_REFRESH_TOKEN,
-    },
-  });
-};
+const Brevo = require('@getbrevo/brevo');
 
 const sendInvitationEmail = async ({
   toEmail,
@@ -112,17 +99,28 @@ const sendInvitationEmail = async ({
   `;
 
   try {
-    const transporter = createTransporter();
-    await transporter.sendMail({
-      from: `"WanderMind" <${process.env.GMAIL_USER}>`,
-      to: toEmail,
-      subject: `🌍 You're invited to join "${tripTitle}"!`,
-      html,
-    });
-    console.log(`📧 Email sent successfully to ${toEmail}`);
+    // Initialize Brevo API client
+    const apiInstance = new Brevo.TransactionalEmailsApi();
+    apiInstance.setApiKey(
+      Brevo.TransactionalEmailsApiApiKeys.apiKey,
+      process.env.BREVO_API_KEY
+    );
+
+    const sendSmtpEmail = new Brevo.SendSmtpEmail();
+    sendSmtpEmail.to = [{ email: toEmail }];
+    sendSmtpEmail.sender = {
+      email: process.env.SENDER_EMAIL,
+      name: process.env.SENDER_NAME || 'WanderMind',
+    };
+    sendSmtpEmail.subject = `🌍 You're invited to join "${tripTitle}"!`;
+    sendSmtpEmail.htmlContent = html;
+
+    const result = await apiInstance.sendTransacEmail(sendSmtpEmail);
+    console.log(`📧 Email sent successfully to ${toEmail} | messageId: ${result.body?.messageId}`);
+    return result;
   } catch (error) {
-    console.error('❌ Error sending email:', error);
-    throw new Error('Email service failed: ' + error.message);
+    console.error('❌ Error sending email:', error?.response?.body || error.message);
+    throw new Error('Email service failed: ' + (error?.response?.body?.message || error.message));
   }
 };
 
