@@ -1,11 +1,10 @@
-/* =============================================
-   TripDetails — Premium Redesign
-   ============================================= */
-
 .trip-details {
   padding: 100px 0 80px;
   min-height: 100vh;
   position: relative;
+  overflow: hidden;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 /* ── Loading screen ─────────────────────────── */
@@ -172,7 +171,6 @@
   box-shadow: var(--shadow-lg), 0 0 48px rgba(108, 99, 255, 0.12);
 }
 
-/* Top accent line */
 .td-hero-accent {
   height: 4px;
   width: 100%;
@@ -195,7 +193,6 @@
   min-width: 0;
 }
 
-/* Destination orb */
 .td-dest-orb {
   width: 72px;
   height: 72px;
@@ -218,7 +215,6 @@
   min-width: 0;
 }
 
-/* Badges row */
 .td-badges-row {
   display: flex;
   align-items: center;
@@ -261,7 +257,6 @@
   border-color: var(--primary);
 }
 
-/* Title */
 .td-title {
   font-size: clamp(1.5rem, 3vw, 2.1rem);
   font-weight: 900;
@@ -271,7 +266,6 @@
   color: var(--text-primary);
 }
 
-/* Meta chips */
 .td-meta-chips {
   display: flex;
   flex-wrap: wrap;
@@ -311,7 +305,6 @@
   max-width: 600px;
 }
 
-/* Quick actions */
 .td-quick-actions {
   display: flex;
   flex-direction: column;
@@ -469,7 +462,6 @@
   margin-left: auto;
 }
 
-/* Timeline */
 .itin-timeline {
   padding: 20px 24px;
   display: flex;
@@ -840,12 +832,20 @@
   gap: 10px;
 }
 
+/* ─── Member row — the fixed part ─────────────
+   Uses a 3-column grid so avatar, info and
+   badges never overlap regardless of screen size.
+   On very small screens badges wrap below info.
+───────────────────────────────────────────────*/
 .member-row {
-  display: flex;
+  display: grid;
+  grid-template-columns: 44px 1fr auto;
   align-items: center;
-  gap: 16px;
-  padding: 14px 20px;
+  gap: 14px;
+  padding: 14px 16px;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+  /* ensure the card never clips its children */
+  overflow: visible;
 }
 
 .member-row:hover {
@@ -860,10 +860,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 700;
   color: #fff;
   flex-shrink: 0;
+  /* never let the avatar shrink or stretch */
+  grid-column: 1;
 }
 
 .member-avatar--pending {
@@ -876,8 +878,10 @@
 }
 
 .member-info {
-  flex: 1;
+  grid-column: 2;
   min-width: 0;
+  /* critical: allows text-overflow to work */
+  overflow: hidden;
 }
 
 .member-info strong {
@@ -892,23 +896,35 @@
 }
 
 .member-info span {
+  display: block;
   font-size: 12px;
   color: var(--text-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
+/* Badges column — always on the right, never pushed under */
 .member-badges {
+  grid-column: 3;
   display: flex;
   gap: 6px;
+  align-items: center;
   flex-shrink: 0;
+  flex-wrap: nowrap;
+  /* keep Admin + You on one line */
 }
 
 .pending-badge {
+  grid-column: 3;
   font-size: 11px;
   font-weight: 700;
   padding: 3px 10px;
   background: rgba(255, 165, 0, 0.12);
   color: #FFA500;
   border-radius: var(--radius-full);
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .pending-section {
@@ -1516,7 +1532,7 @@
   transform: translateY(-1px) !important;
 }
 
-/* -- Responsive ------------------------------- */
+/* ── Responsive ─────────────────────────────── */
 @media (max-width: 1024px) {
   .budget-overview {
     grid-template-columns: repeat(2, 1fr);
@@ -1636,6 +1652,19 @@
     padding: 16px 12px;
   }
 
+  /* Member rows on tablet — tighten avatar size */
+  .member-row {
+    grid-template-columns: 40px 1fr auto;
+    gap: 10px;
+    padding: 12px 14px;
+  }
+
+  .member-avatar {
+    width: 40px;
+    height: 40px;
+    font-size: 13px;
+  }
+
   .invite-row {
     flex-direction: column;
   }
@@ -1682,8 +1711,8 @@
   }
 
   .td-tab {
-    padding: 8px 12px;
-    font-size: 12px;
+    padding: 8px 10px;
+    font-size: 11px;
     flex: 1;
     justify-content: center;
   }
@@ -1692,18 +1721,28 @@
     display: none;
   }
 
-  .map-estimates-grid {
-    grid-template-columns: 1fr;
-  }
-
+  /* Member rows on mobile — stack badges below info when very narrow */
   .member-row {
+    grid-template-columns: 36px 1fr;
+    grid-template-rows: auto auto;
+    gap: 8px 10px;
     padding: 12px;
   }
 
   .member-avatar {
+    grid-column: 1;
+    grid-row: 1 / 3;
+    /* span both rows so it sits beside name+email+badges */
     width: 36px;
     height: 36px;
     font-size: 12px;
+    border-radius: 10px;
+    align-self: start;
+  }
+
+  .member-info {
+    grid-column: 2;
+    grid-row: 1;
   }
 
   .member-info strong {
@@ -1712,6 +1751,30 @@
 
   .member-info span {
     font-size: 11px;
+  }
+
+  /* Badges drop to a new row under the info text */
+  .member-badges {
+    grid-column: 2;
+    grid-row: 2;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  /* Pending badge follows same pattern */
+  .pending-badge {
+    grid-column: 2;
+    grid-row: 2;
+    width: fit-content;
+  }
+
+  .map-estimates-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .member-row:hover {
+    transform: none;
+    box-shadow: var(--shadow-md);
   }
 
   .ai-chat-header {
@@ -1735,7 +1798,6 @@
   .chat-bubble {
     max-width: 95%;
     padding: 10px 14px;
-    font-size: 12.5px;
   }
 
   .packing-grid {
@@ -1745,14 +1807,4 @@
   .budget-overview {
     grid-template-columns: 1fr;
   }
-}
-
-.trip-details {
-  padding: 100px 0 80px;
-  min-height: 100vh;
-  position: relative;
-  /* ADD THIS */
-  overflow: hidden; 
-  width: 100%;
-  box-sizing: border-box;
 }
