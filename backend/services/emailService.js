@@ -129,7 +129,7 @@ const sendInvitationEmail = async ({ toEmail, inviterName, tripTitle, destinatio
       subject: `🌍 You're invited to join "${tripTitle}"!`,
       html
     });
-    console.log(`📧 Invitation email sent successfully to ${toEmail}`);
+    console.log('Invitation email sent successfully');
   } catch (error) {
     console.error('❌ Error sending invitation email:', error);
     throw new Error('Email service failed: ' + error.message);
@@ -137,4 +137,3 @@ const sendInvitationEmail = async ({ toEmail, inviterName, tripTitle, destinatio
 };
 
 module.exports = { sendInvitationEmail };
-

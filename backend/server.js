@@ -11,13 +11,22 @@ const errorHandler = require('./middleware/errorHandler');
 
 const app = express();
 const clientBuildPath = path.join(__dirname, 'dist');
+const allowedOrigins = (process.env.CLIENT_URL || 'http://localhost:5173')
+  .split(',')
+  .map(origin => origin.trim())
+  .filter(Boolean);
 
 app.set('trust proxy', 1);
 
 // Security middlewares
 app.use(helmet());
 app.use(cors({
-  origin: process.env.CLIENT_URL || 'http://localhost:5173',
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    }
+    return callback(new Error('Not allowed by CORS'));
+  },
   credentials: true
 }));
 
@@ -50,12 +59,12 @@ app.use('/api/ai', require('./routes/ai'));
 app.use('/api/invites', require('./routes/invites'));
 
 // Serve the production React build when backend/dist exists.
-if (fs.existsSync(clientBuildPath)) {
-  app.use(express.static(clientBuildPath));
-  app.get(/^(?!\/api).*/, (req, res) => {
-    res.sendFile(path.join(clientBuildPath, 'index.html'));
-  });
-}
+// if (fs.existsSync(clientBuildPath)) {
+//   app.use(express.static(clientBuildPath));
+//   app.get(/^(?!\/api).*/, (req, res) => {
+//     res.sendFile(path.join(clientBuildPath, 'index.html'));
+//   });
+// }
 
 // 404 handler
 app.use((req, res) => {

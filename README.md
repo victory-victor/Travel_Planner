@@ -40,6 +40,12 @@ EMAIL_PASS=your-email-password
 EMAIL_FROM=WanderMind <noreply@example.com>
 ```
 
+For a separately hosted frontend, create `frontend/.env` locally:
+
+```env
+VITE_API_URL=http://localhost:5000/api
+```
+
 Never commit `.env` files. If a secret was ever pasted into chat, terminal output, or Git, rotate it before deployment.
 
 ## Run Locally
@@ -92,7 +98,8 @@ Open `http://localhost:5000`. The Express server will serve both `/api/*` and th
 Recommended free setup:
 
 - Database: MongoDB Atlas Free cluster.
-- App hosting: Render Free Web Service.
+- Backend hosting: Render Free Web Service.
+- Frontend hosting: Vercel, Netlify, or Render Static Site.
 
 ### 1. Create MongoDB Atlas Free Cluster
 
@@ -139,8 +146,8 @@ JWT_SECRET=your-new-production-secret
 JWT_EXPIRE=7d
 OPENROUTER_API_KEY=your-openrouter-key
 OPENROUTER_MODEL=openai/gpt-4o-mini
-SITE_URL=https://your-render-app.onrender.com
-CLIENT_URL=https://your-render-app.onrender.com
+SITE_URL=https://your-backend.onrender.com
+CLIENT_URL=https://your-frontend.vercel.app
 EMAIL_HOST=...
 EMAIL_PORT=...
 EMAIL_USER=...
@@ -148,7 +155,47 @@ EMAIL_PASS=...
 EMAIL_FROM=...
 ```
 
-7. Deploy. Your Render URL should serve both the UI and API.
+7. Deploy. Your Render URL should serve the API at `https://your-backend.onrender.com/api`.
+
+If you need to allow more than one frontend origin, set `CLIENT_URL` as a comma-separated list:
+
+```env
+CLIENT_URL=https://your-frontend.vercel.app,http://localhost:5173
+```
+
+### 4. Deploy Frontend Separately
+
+1. Push the repo to GitHub.
+2. Create a frontend project on Vercel, Netlify, or Render Static Site.
+3. Set the frontend root directory to `frontend`.
+4. Build command:
+
+```bash
+npm run build
+```
+
+5. Output directory:
+
+```text
+dist
+```
+
+6. Add this frontend environment variable before building:
+
+```env
+VITE_API_URL=https://your-backend.onrender.com/api
+```
+
+7. Deploy the frontend, then update the backend `CLIENT_URL` to the final frontend URL.
+
+## Optional Single-Service Deployment
+
+If you prefer one Render backend service to serve the UI too, build the frontend and copy `frontend/dist` into `backend/dist`. Then set:
+
+```env
+CLIENT_URL=https://your-backend.onrender.com
+SITE_URL=https://your-backend.onrender.com
+```
 
 ## Deployment Notes
 
