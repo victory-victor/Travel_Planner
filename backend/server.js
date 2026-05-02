@@ -80,7 +80,7 @@ const startServer = async () => {
   await connectDB();
 
   app.listen(PORT, () => {
-    console.log(`\n🚀 WanderMind Server running on http://localhost:${PORT}`);
+    console.log(`\n🚀 WanderMind Server running on ${process.env.SITE_URL}`);
     console.log(`📱 Environment: ${process.env.NODE_ENV || 'development'}\n`);
   });
 };
