@@ -139,7 +139,8 @@ const Login = () => {
     if (!fpEmail.trim()) return toast.error('Enter your email address');
     setLoading(true);
     try {
-      await axios.post('/api/auth/forgot-password', { email: fpEmail.trim() });
+      // await axios.post('/api/auth/forgot-password', { email: fpEmail.trim() });
+      await axios.post(`${import.meta.env.VITE_API_URL}/auth/forgot-password`, { email: fpEmail.trim() });
       toast.success('OTP sent! Check your inbox 📬');
       setOtp(['', '', '', '']);
       startTimer();
@@ -157,7 +158,8 @@ const Login = () => {
     if (otpTimer > 0 || resending) return;
     setResending(true);
     try {
-      await axios.post('/api/auth/forgot-password', { email: fpEmail.trim() });
+      // await axios.post('/api/auth/forgot-password', { email: fpEmail.trim() });
+      await axios.post(`${import.meta.env.VITE_API_URL}/auth/forgot-password`, { email: fpEmail.trim() });
       toast.success('New OTP sent!');
       setOtp(['', '', '', '']);
       startTimer();
@@ -178,7 +180,11 @@ const Login = () => {
     setLoading(true);
     try {
       // Server checks OTP and marks it verified — no deletion yet
-      await axios.post('/api/auth/verify-otp', {
+      // await axios.post('/api/auth/verify-otp', {
+      //   email: fpEmail.trim(),
+      //   otp: code,
+      // });
+      await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/verify-otp`, {
         email: fpEmail.trim(),
         otp: code,
       });
@@ -204,7 +210,12 @@ const Login = () => {
     if (newPassword !== confirmPassword) return toast.error('Passwords do not match');
     setLoading(true);
     try {
-      const { data } = await axios.post('/api/auth/reset-password', {
+      // const { data } = await axios.post('/api/auth/reset-password', {
+      //   email: fpEmail.trim(),
+      //   newPassword,
+      //   // NO otp field needed here — server checks isOTPVerified(email)
+      // });
+      const { data } = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/reset-password`, {
         email: fpEmail.trim(),
         newPassword,
         // NO otp field needed here — server checks isOTPVerified(email)
