@@ -1,16 +1,3 @@
-// emailService.js — Brevo via native fetch (zero dependencies beyond Node 18+)
-// Works 100% on Render free tier — pure HTTPS, no SMTP, no nodemailer
-//
-// SETUP:
-// 1. Sign up free at https://brevo.com
-// 2. Top-right avatar → SMTP & API → API Keys → Generate new key → copy it
-// 3. Senders & IP → Senders → Add a Sender → add your Gmail → verify the email they send you
-// 4. Add to Render environment variables:
-//    BREVO_API_KEY  = your_api_key
-//    SENDER_EMAIL   = your@gmail.com
-//    SENDER_NAME    = WanderMind
-// 5. No new npm packages needed — uses built-in fetch (Node 18+)
-
 const sendInvitationEmail = async ({
   toEmail,
   inviterName,
@@ -135,4 +122,122 @@ const sendInvitationEmail = async ({
   return data;
 };
 
-module.exports = { sendInvitationEmail };
+const sendOTPEmail = async ({ toEmail, otp, userName }) => {
+  const html = `
+  <!DOCTYPE html>
+  <html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your WanderMind OTP</title>
+  </head>
+  <body style="margin:0;padding:0;background-color:#050505;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color:#050505;">
+      <tr>
+        <td align="center" style="padding:40px 16px;">
+          <table border="0" cellpadding="0" cellspacing="0" width="520" style="background-color:#111111;border-radius:24px;overflow:hidden;border:1px solid #222222;max-width:100%;">
+
+            <!-- Header -->
+            <tr>
+              <td>
+                <div style="background:linear-gradient(135deg,#1e3a8a 0%,#312e81 100%);padding:48px 40px 40px;text-align:center;">
+                  <h1 style="color:#ffffff;margin:0;font-size:32px;font-weight:800;letter-spacing:-1px;">🌍 WanderMind</h1>
+                  <p style="color:#94a3b8;margin:10px 0 0;font-size:15px;">Password Reset Verification</p>
+                </div>
+              </td>
+            </tr>
+
+            <!-- Body -->
+            <tr>
+              <td style="padding:40px 40px 32px;">
+                <h2 style="color:#f8fafc;margin:0 0 12px;font-size:22px;font-weight:700;text-align:center;">
+                  Your verification code
+                </h2>
+                <p style="color:#94a3b8;font-size:15px;line-height:1.6;margin:0 0 32px;text-align:center;">
+                  Hi${userName ? ` <strong style="color:#ffffff;">${userName}</strong>` : ''}! Use the code below to reset your password. It expires in <strong style="color:#ffffff;">10 minutes</strong>.
+                </p>
+
+                <!-- OTP Box Container -->
+                <div style="background:linear-gradient(135deg,rgba(108,99,255,0.1),rgba(255,101,132,0.05));border:1px solid rgba(108,99,255,0.2);border-radius:20px;padding:32px;text-align:center;margin-bottom:32px;">
+                  <p style="color:#94a3b8;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.2em;margin:0 0 20px;">One-Time Password</p>
+                  
+                  <!-- Responsive Table-based OTP -->
+                  <table border="0" cellpadding="0" cellspacing="0" align="center">
+                    <tr>
+                      ${otp.split('').map(d => `
+                        <td style="padding: 0 4px;">
+                          <table border="0" cellpadding="0" cellspacing="0">
+                            <tr>
+                              <td width="48" height="60" align="center" valign="middle" style="background:rgba(108,99,255,0.15);border:2px solid #6366f1;border-radius:12px;font-family:monospace;font-size:32px;font-weight:900;color:#a5b4fc;line-height:60px;">
+                                ${d}
+                              </td>
+                            </tr>
+                          </table>
+                        </td>
+                      `).join('')}
+                    </tr>
+                  </table>
+
+                  <p style="color:#6366f1;font-size:13px;margin:24px 0 0;font-weight:600;">Valid for 10 minutes · Do not share</p>
+                </div>
+
+                <!-- Warning Box -->
+                <table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color:rgba(255,165,0,0.06);border:1px solid rgba(255,165,0,0.2);border-radius:12px;">
+                  <tr>
+                    <td style="padding:16px 20px;">
+                      <p style="color:#fbbf24;font-size:13px;margin:0;line-height:1.5;">
+                        ⚠️ If you didn't request this, ignore this email. Your password will remain unchanged.
+                      </p>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+
+            <!-- Footer -->
+            <tr>
+              <td style="background-color:#0a0a0a;padding:28px 40px;text-align:center;border-top:1px solid #222222;">
+                <p style="color:#475569;font-size:11px;margin:0;text-transform:uppercase;letter-spacing:0.15em;">© 2026 WanderMind Inc.</p>
+              </td>
+            </tr>
+
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+  </html>
+  `;
+
+  const payload = {
+    sender: {
+      email: process.env.SENDER_EMAIL,
+      name: process.env.SENDER_NAME || 'WanderMind',
+    },
+    to: [{ email: toEmail }],
+    subject: `${otp} is your WanderMind verification code`,
+    htmlContent: html,
+  };
+
+  const response = await fetch('https://api.brevo.com/v3/smtp/email', {
+    method: 'POST',
+    headers: {
+      'accept': 'application/json',
+      'api-key': process.env.BREVO_API_KEY,
+      'content-type': 'application/json',
+    },
+    body: JSON.stringify(payload),
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    console.error('❌ Brevo OTP email error:', data);
+    throw new Error('Failed to send OTP email: ' + (data.message || response.statusText));
+  }
+
+  console.log(`📧 OTP email sent to ${toEmail} | messageId: ${data.messageId}`);
+  return data;
+};
+
+module.exports = { sendInvitationEmail, sendOTPEmail };

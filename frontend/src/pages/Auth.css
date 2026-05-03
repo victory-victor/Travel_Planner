@@ -25,50 +25,75 @@
   filter: blur(80px);
   opacity: 0.15;
 }
+
 .orb-1 {
-  width: 600px; height: 600px;
+  width: 600px;
+  height: 600px;
   background: var(--primary);
-  top: -200px; left: -100px;
+  top: -200px;
+  left: -100px;
   animation: orbFloat1 8s ease-in-out infinite;
 }
+
 .orb-2 {
-  width: 500px; height: 500px;
+  width: 500px;
+  height: 500px;
   background: var(--secondary);
-  bottom: -150px; right: -100px;
+  bottom: -150px;
+  right: -100px;
   animation: orbFloat2 10s ease-in-out infinite;
 }
+
 .orb-3 {
-  width: 400px; height: 400px;
+  width: 400px;
+  height: 400px;
   background: var(--accent-green);
-  top: 50%; left: 50%;
-  transform: translate(-50%,-50%);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   opacity: 0.06;
   animation: orbFloat1 12s ease-in-out infinite reverse;
 }
 
 @keyframes orbFloat1 {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(30px, -30px) scale(1.05); }
+
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+
+  50% {
+    transform: translate(30px, -30px) scale(1.05);
+  }
 }
+
 @keyframes orbFloat2 {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(-20px, 20px) scale(1.08); }
+
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+
+  50% {
+    transform: translate(-20px, 20px) scale(1.08);
+  }
 }
 
 .auth-grid {
   position: absolute;
   inset: 0;
-  background-image: linear-gradient(rgba(108,99,255,0.04) 1px, transparent 1px),
-                    linear-gradient(90deg, rgba(108,99,255,0.04) 1px, transparent 1px);
+  background-image: linear-gradient(rgba(108, 99, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(108, 99, 255, 0.04) 1px, transparent 1px);
   background-size: 60px 60px;
 }
 
-.particles { 
-  position: fixed; 
-  inset: 0; 
-  pointer-events: none; 
+.particles {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
   z-index: 1;
 }
+
 .particle {
   position: absolute;
   border-radius: 50%;
@@ -104,12 +129,14 @@
 .auth-brand::before {
   content: '';
   position: absolute;
-  width: 300px; height: 300px;
+  width: 300px;
+  height: 300px;
   background: var(--primary);
   border-radius: 50%;
   filter: blur(80px);
   opacity: 0.1;
-  bottom: -100px; left: -50px;
+  bottom: -100px;
+  left: -50px;
 }
 
 .auth-logo {
@@ -136,7 +163,11 @@
   line-height: 1.6;
 }
 
-.auth-features { display: flex; flex-direction: column; gap: 12px; }
+.auth-features {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
 
 .auth-feature-item {
   display: flex;
@@ -146,10 +177,13 @@
   color: var(--text-secondary);
 }
 
-.auth-feature-item span:first-child { font-size: 20px; flex-shrink: 0; }
+.auth-feature-item span:first-child {
+  font-size: 20px;
+  flex-shrink: 0;
+}
 
 .auth-testimonial {
-  background: rgba(255,255,255,0.04);
+  background: rgba(255, 255, 255, 0.04);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
   padding: 20px;
@@ -183,7 +217,11 @@
 }
 
 /* Signup brand extras */
-.auth-steps-preview { display: flex; flex-direction: column; gap: 12px; }
+.auth-steps-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
 
 .auth-step-preview {
   display: flex;
@@ -194,17 +232,24 @@
 }
 
 .auth-step-num {
-  width: 28px; height: 28px;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   background: var(--gradient-primary);
-  display: flex; align-items: center; justify-content: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   font-size: 12px;
   font-weight: 800;
   color: #fff;
   flex-shrink: 0;
 }
 
-.auth-badge-row { display: flex; gap: 10px; flex-wrap: wrap; }
+.auth-badge-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
 
 /* ── FORM PANEL ───────────────────────────── */
 .auth-form-panel {
@@ -220,7 +265,9 @@
   gap: 12px;
 }
 
-.auth-progress .progress-bar { flex: 1; }
+.auth-progress .progress-bar {
+  flex: 1;
+}
 
 .auth-step-label {
   font-size: 12px;
@@ -239,24 +286,37 @@
   margin: 0;
 }
 
-.auth-form { display: flex; flex-direction: column; gap: 20px; }
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
 
 /* Input wrapper with icon */
-.input-wrapper { position: relative; }
+.input-wrapper {
+  position: relative;
+}
 
 .input-icon {
   position: absolute;
   left: 14px;
   top: 50%;
   transform: translateY(-50%);
-  color: var(--primary-light); /* Changed from text-muted for better visibility */
+  color: var(--primary-light);
+  /* Changed from text-muted for better visibility */
   pointer-events: none;
-  z-index: 2; /* Ensure it stays above the input background */
+  z-index: 2;
+  /* Ensure it stays above the input background */
   opacity: 0.8;
 }
 
-.form-input.input-with-icon { padding-left: 44px; }
-.form-input.input-with-toggle { padding-right: 44px; }
+.form-input.input-with-icon {
+  padding-left: 44px;
+}
+
+.form-input.input-with-toggle {
+  padding-right: 44px;
+}
 
 .toggle-pass {
   position: absolute;
@@ -294,11 +354,19 @@
   font-weight: 600;
   color: var(--text-secondary);
 }
-.style-btn span:first-child { font-size: 22px; }
-.style-btn:hover { border-color: var(--border-hover); color: var(--text-primary); }
+
+.style-btn span:first-child {
+  font-size: 22px;
+}
+
+.style-btn:hover {
+  border-color: var(--border-hover);
+  color: var(--text-primary);
+}
+
 .style-btn.active {
   border-color: var(--primary);
-  background: rgba(108,99,255,0.15);
+  background: rgba(108, 99, 255, 0.15);
   color: var(--primary-light);
 }
 
@@ -310,6 +378,7 @@
   color: var(--text-muted);
   font-size: 13px;
 }
+
 .auth-divider::before,
 .auth-divider::after {
   content: '';
@@ -324,22 +393,364 @@
   color: var(--text-secondary);
   margin: 0;
 }
+
 .auth-switch a {
   color: var(--primary-light);
   font-weight: 600;
   text-decoration: none;
 }
-.auth-switch a:hover { text-decoration: underline; }
+
+.auth-switch a:hover {
+  text-decoration: underline;
+}
 
 /* Responsive */
 @media (max-width: 768px) {
-  .auth-panel { grid-template-columns: 1fr; }
-  .auth-brand { display: none; }
-  .auth-form-panel { padding: 32px 24px; }
-  .travel-style-grid { grid-template-columns: repeat(3, 1fr); }
+  .auth-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .auth-brand {
+    display: none;
+  }
+
+  .auth-form-panel {
+    padding: 32px 24px;
+  }
+
+  .travel-style-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
 
 @media (max-width: 480px) {
-  .auth-page { padding: 80px 16px 32px; }
-  .travel-style-grid { grid-template-columns: repeat(2, 1fr); }
+  .auth-page {
+    padding: 80px 16px 32px;
+  }
+
+  .travel-style-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* =============================================
+   Auth.css ADDITIONS — OTP / Forgot Password
+   Paste these at the END of your existing Auth.css
+   ============================================= */
+
+/* ── Forgot-password label row ─────────────── */
+.fp-label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
+.fp-label-row .form-label {
+  margin-bottom: 0;
+}
+
+/* Inline text-link button */
+.fp-link {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--primary-light);
+  font-family: var(--font-secondary);
+  transition: color 0.15s, opacity 0.15s;
+  text-decoration: none;
+}
+
+.fp-link:hover {
+  color: var(--primary);
+  opacity: 0.85;
+}
+
+.fp-link:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+/* ── Progress dots (forgot-password stages) ── */
+.fp-progress {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin-bottom: 8px;
+  position: relative;
+}
+
+.fp-progress-line {
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 2px;
+  background: var(--border);
+  border-radius: 2px;
+  z-index: 0;
+}
+
+.fp-progress-fill {
+  height: 100%;
+  background: var(--gradient-primary);
+  border-radius: 2px;
+  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.fp-dot {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  background: var(--bg-card);
+  flex-shrink: 0;
+  position: relative;
+  z-index: 1;
+  transition: all 0.3s ease;
+}
+
+.fp-dot+.fp-dot {
+  margin-left: auto;
+}
+
+.fp-dot:last-of-type {
+  margin-left: auto;
+}
+
+/* space them evenly */
+.fp-progress {
+  justify-content: space-between;
+}
+
+.fp-dot--active {
+  border-color: var(--primary);
+  background: var(--primary);
+  box-shadow: 0 0 10px rgba(108, 99, 255, 0.5);
+  transform: scale(1.15);
+}
+
+.fp-dot--done {
+  border-color: var(--accent-green);
+  background: var(--accent-green);
+}
+
+/* ── OTP section ────────────────────────────── */
+.otp-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding: 8px 0;
+}
+
+.otp-hint {
+  font-size: 13.5px;
+  color: var(--text-secondary);
+  margin: 0;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.otp-hint strong {
+  color: var(--text-primary);
+}
+
+.otp-change-email {
+  font-size: 12px;
+}
+
+/* The 4 boxes */
+.otp-boxes {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+}
+
+.otp-box {
+  width: 64px;
+  height: 72px;
+  border-radius: 16px;
+  border: 2px solid var(--border);
+  background: var(--bg-input);
+  color: var(--text-primary);
+  font-size: 28px;
+  font-weight: 900;
+  text-align: center;
+  font-family: var(--font-primary);
+  caret-color: var(--primary);
+  transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s;
+  outline: none;
+  -moz-appearance: textfield;
+}
+
+.otp-box::-webkit-inner-spin-button,
+.otp-box::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+}
+
+.otp-box:focus {
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+.otp-box--filled {
+  border-color: var(--primary);
+  background: rgba(108, 99, 255, 0.08);
+  color: var(--primary-light);
+}
+
+/* Shake animation for wrong OTP (add class via JS if needed) */
+@keyframes otpShake {
+
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+
+  20% {
+    transform: translateX(-6px);
+  }
+
+  40% {
+    transform: translateX(6px);
+  }
+
+  60% {
+    transform: translateX(-4px);
+  }
+
+  80% {
+    transform: translateX(4px);
+  }
+}
+
+.otp-box--error {
+  border-color: #EF4444;
+  animation: otpShake 0.4s ease;
+}
+
+/* Timer / resend */
+.otp-resend-row {
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.otp-timer {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.otp-timer strong {
+  color: var(--primary-light);
+  font-variant-numeric: tabular-nums;
+  min-width: 28px;
+  display: inline-block;
+}
+
+/* Verify button — lights up when all boxes filled */
+.otp-verify-btn {
+  opacity: 0.45;
+  transition: opacity 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease !important;
+}
+
+.otp-verify-btn--ready {
+  opacity: 1;
+}
+
+/* ── Password strength bar ──────────────────── */
+.pass-strength {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.pass-strength-track {
+  flex: 1;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.pass-strength-fill {
+  height: 100%;
+  border-radius: var(--radius-full);
+  transition: width 0.3s ease, background 0.3s ease;
+}
+
+.pass-strength-label {
+  font-size: 11.5px;
+  font-weight: 700;
+  white-space: nowrap;
+  min-width: 44px;
+  text-align: right;
+  transition: color 0.3s ease;
+}
+
+/* ── Input states ───────────────────────────── */
+.input-error {
+  border-color: #EF4444 !important;
+}
+
+.input-success {
+  border-color: var(--accent-green) !important;
+}
+
+.input-match-icon {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 14px;
+  pointer-events: none;
+}
+
+/* ── Mobile tweaks ──────────────────────────── */
+@media (max-width: 480px) {
+  .otp-boxes {
+    gap: 8px;
+  }
+
+  .otp-box {
+    width: 56px;
+    height: 64px;
+    font-size: 24px;
+    border-radius: 14px;
+  }
+
+  .fp-label-row {
+    flex-direction: row;
+    /* keep on one line even on small screens */
+    align-items: center;
+  }
+
+  .fp-progress {
+    padding: 0 4px;
+  }
+}
+
+@media (max-width: 360px) {
+  .otp-boxes {
+    gap: 6px;
+  }
+
+  .otp-box {
+    width: 48px;
+    height: 56px;
+    font-size: 22px;
+    border-radius: 12px;
+  }
 }

@@ -2,6 +2,8 @@ import { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { gsap } from 'gsap';
+import toast from 'react-hot-toast';
+import axios from 'axios';
 import './Navbar.css';
 
 const Navbar = () => {
@@ -9,6 +11,9 @@ const Navbar = () => {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [dropOpen, setDropOpen] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [deleteLoading, setDeleteLoading] = useState(false);
+  const [deleteConfirmText, setDeleteConfirmText] = useState('');
   const navRef = useRef(null);
   const mobileMenuRef = useRef(null);
   const overlayRef = useRef(null);
@@ -54,6 +59,21 @@ const Navbar = () => {
   };
 
   const getInitials = (name) => name?.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) || 'U';
+
+  const handleDeleteAccount = async () => {
+    setDeleteLoading(true);
+    try {
+      await axios.delete('/api/auth/delete-account');
+      toast.success('Account deleted. Goodbye! 👋');
+      logout();
+      navigate('/');
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Failed to delete account');
+    } finally {
+      setDeleteLoading(false);
+      setShowDeleteModal(false);
+    }
+  };
 
   return (
     <>
@@ -108,6 +128,19 @@ const Navbar = () => {
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /><polyline points="16 17 21 12 16 7" /><line x1="21" y1="12" x2="9" y2="12" /></svg>
                       Sign Out
                     </button>
+                    <hr className="dropdown-divider" />
+                    <button
+                      className="dropdown-item dropdown-delete-account"
+                      onClick={() => { setDropOpen(false); setShowDeleteModal(true); }}
+                    >
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <polyline points="3 6 5 6 21 6" />
+                        <path d="M19 6l-1 14H6L5 6" />
+                        <path d="M10 11v6M14 11v6" />
+                        <path d="M9 6V4h6v2" />
+                      </svg>
+                      Delete Account
+                    </button>
                   </div>
                 )}
               </div>
@@ -147,6 +180,12 @@ const Navbar = () => {
                 </div>
               </div>
               <button onClick={handleLogout} className="mobile-link mobile-logout">Sign Out</button>
+              <button
+                onClick={() => { setMenuOpen(false); setShowDeleteModal(true); }}
+                className="mobile-link mobile-delete-account"
+              >
+                🗑️ Delete Account
+              </button>
             </>
           ) : (
             <>
@@ -156,6 +195,50 @@ const Navbar = () => {
           )}
         </div>
       </div>
+      {showDeleteModal && (
+        <div
+          className="delete-modal-overlay"
+          onClick={() => { setShowDeleteModal(false); setDeleteConfirmText(''); }}
+        >
+          <div className="delete-modal" onClick={e => e.stopPropagation()}>
+            <div className="delete-modal-icon">⚠️</div>
+            <h3>Delete Account?</h3>
+            <p>
+              This will permanently delete your account, all your trips, and all associated data.
+              <strong> This cannot be undone.</strong>
+            </p>
+            <p className="delete-modal-confirm-label">
+              Type <strong>DELETE</strong> to confirm
+            </p>
+            <input
+              type="text"
+              className="delete-modal-input"
+              placeholder="Type DELETE here"
+              value={deleteConfirmText}
+              onChange={e => setDeleteConfirmText(e.target.value)}
+              autoFocus
+            />
+            <div className="delete-modal-actions">
+              <button
+                className="btn btn-secondary"
+                onClick={() => { setShowDeleteModal(false); setDeleteConfirmText(''); }}
+              >
+                Cancel
+              </button>
+              <button
+                className="btn delete-modal-confirm-btn"
+                onClick={handleDeleteAccount}
+                disabled={deleteConfirmText !== 'DELETE' || deleteLoading}
+              >
+                {deleteLoading
+                  ? <><div className="spinner" style={{ width: 16, height: 16, borderWidth: 2 }} /> Deleting…</>
+                  : '🗑️ Delete Forever'
+                }
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 };
