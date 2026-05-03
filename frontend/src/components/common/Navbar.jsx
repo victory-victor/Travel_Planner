@@ -7,7 +7,7 @@ import axios from 'axios';
 import './Navbar.css';
 
 const Navbar = () => {
-  const { user, isAuthenticated, logout } = useAuth();
+  const { user, isAuthenticated, logout, deleteAccount } = useAuth();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [dropOpen, setDropOpen] = useState(false);
@@ -60,12 +60,12 @@ const Navbar = () => {
 
   const getInitials = (name) => name?.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) || 'U';
 
-  const handleDeleteAccount = async () => {
+  const handleDeleteClick = async () => {
     setDeleteLoading(true);
     try {
-      await axios.delete('/api/auth/delete-account');
+      await deleteAccount(); // from context
+
       toast.success('Account deleted. Goodbye! 👋');
-      logout();
       navigate('/');
     } catch (err) {
       toast.error(err.response?.data?.message || 'Failed to delete account');
@@ -227,7 +227,7 @@ const Navbar = () => {
               </button>
               <button
                 className="btn delete-modal-confirm-btn"
-                onClick={handleDeleteAccount}
+                onClick={handleDeleteClick}
                 disabled={deleteConfirmText !== 'DELETE' || deleteLoading}
               >
                 {deleteLoading

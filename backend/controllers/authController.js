@@ -1,5 +1,7 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
+const Trip = require('../models/Trip');
+const Invitation = require('../models/Invitation');
 const { generateOTP, saveOTP, verifyOTP, isOTPVerified, deleteOTP } = require('../services/Otpservice');
 const { sendOTPEmail } = require('../services/emailService');
 

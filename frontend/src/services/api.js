@@ -32,6 +32,7 @@ export const authAPI = {
   login: (data) => API.post('/auth/login', data),
   getMe: () => API.get('/auth/me'),
   updateProfile: (data) => API.put('/auth/profile', data),
+  deleteAccount: () => API.delete('/auth/delete-account'),
 };
 
 // ── Trips ─────────────────────────────────────────
