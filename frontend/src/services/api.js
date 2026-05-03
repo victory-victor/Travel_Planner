@@ -33,6 +33,9 @@ export const authAPI = {
   getMe: () => API.get('/auth/me'),
   updateProfile: (data) => API.put('/auth/profile', data),
   deleteAccount: () => API.delete('/auth/delete-account'),
+  forgotPassword: (email) => API.post('/auth/forgot-password', { email }),
+  verifyOTP: (email, otp) => API.post('/auth/verify-otp', { email, otp }),
+  resetPassword: (email, newPassword) => API.post('/auth/reset-password', { email, newPassword }),
 };
 
 // ── Trips ─────────────────────────────────────────

@@ -26,7 +26,7 @@ const Login = () => {
   const [resending, setResending] = useState(false);
   const [otpError, setOtpError] = useState(false); // shake boxes on wrong OTP
 
-  const { login } = useAuth();
+  const { login, forgotPassword, verifyOTP, resetPassword } = useAuth();
   const navigate = useNavigate();
 
   const panelRef = useRef(null);
@@ -140,7 +140,7 @@ const Login = () => {
     setLoading(true);
     try {
       // await axios.post('/api/auth/forgot-password', { email: fpEmail.trim() });
-      await axios.post(`${import.meta.env.VITE_API_URL}/auth/forgot-password`, { email: fpEmail.trim() });
+      await forgotPassword(fpEmail.trim());
       toast.success('OTP sent! Check your inbox 📬');
       setOtp(['', '', '', '']);
       startTimer();
@@ -159,7 +159,7 @@ const Login = () => {
     setResending(true);
     try {
       // await axios.post('/api/auth/forgot-password', { email: fpEmail.trim() });
-      await axios.post(`${import.meta.env.VITE_API_URL}/auth/forgot-password`, { email: fpEmail.trim() });
+      await forgotPassword(fpEmail.trim());
       toast.success('New OTP sent!');
       setOtp(['', '', '', '']);
       startTimer();
@@ -184,10 +184,7 @@ const Login = () => {
       //   email: fpEmail.trim(),
       //   otp: code,
       // });
-      await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/verify-otp`, {
-        email: fpEmail.trim(),
-        otp: code,
-      });
+      await verifyOTP(fpEmail.trim(), code);
       toast.success('OTP verified ✅');
       animateStage('new-password');
     } catch (err) {
@@ -215,11 +212,7 @@ const Login = () => {
       //   newPassword,
       //   // NO otp field needed here — server checks isOTPVerified(email)
       // });
-      const { data } = await axios.post(`${import.meta.env.VITE_API_URL}/api/auth/reset-password`, {
-        email: fpEmail.trim(),
-        newPassword,
-        // NO otp field needed here — server checks isOTPVerified(email)
-      });
+      const { data } = await resetPassword(fpEmail.trim(), newPassword);
       localStorage.setItem('token', data.token);
       toast.success('Password reset! Welcome back 🎉');
       navigate('/dashboard');
