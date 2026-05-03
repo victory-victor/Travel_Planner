@@ -207,19 +207,21 @@ const Login = () => {
     if (newPassword !== confirmPassword) return toast.error('Passwords do not match');
     setLoading(true);
     try {
-      // const { data } = await axios.post('/api/auth/reset-password', {
-      //   email: fpEmail.trim(),
-      //   newPassword,
-      //   // NO otp field needed here — server checks isOTPVerified(email)
-      // });
-      const { data } = await resetPassword(fpEmail.trim(), newPassword);
-      localStorage.setItem('token', data.token);
+      // resetPassword in AuthContext already returns data (the unwrapped response)
+      // so we DON'T destructure { data } from it — we use it directly
+      const data = await resetPassword(fpEmail.trim(), newPassword);
+
+      // AuthContext.resetPassword does NOT auto-login, so we do it manually
+      if (data.token) {
+        localStorage.setItem('wm_token', data.token);
+        localStorage.setItem('wm_user', JSON.stringify(data.user));
+      }
+
       toast.success('Password reset! Welcome back 🎉');
       navigate('/dashboard');
     } catch (err) {
       const msg = err.response?.data?.message || 'Reset failed';
       toast.error(msg);
-      // If server says OTP not verified, push back to OTP stage
       if (msg.toLowerCase().includes('otp') || msg.toLowerCase().includes('verified')) {
         setOtp(['', '', '', '']);
         animateStage('otp');
@@ -518,7 +520,7 @@ const Login = () => {
                       id="confirm-pass"
                       type="password"
                       className={`form-input input-with-icon ${confirmPassword && newPassword !== confirmPassword ? 'input-error' :
-                          confirmPassword && newPassword === confirmPassword ? 'input-success' : ''
+                        confirmPassword && newPassword === confirmPassword ? 'input-success' : ''
                         }`}
                       placeholder="Repeat password"
                       value={confirmPassword}

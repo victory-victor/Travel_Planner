@@ -73,6 +73,15 @@ export const AuthProvider = ({ children }) => {
 
   const resetPassword = async (email, newPassword) => {
     const { data } = await authAPI.resetPassword(email, newPassword);
+
+    // Auto-login after successful reset
+    if (data.token) {
+      localStorage.setItem('wm_token', data.token);
+      localStorage.setItem('wm_user', JSON.stringify(data.user));
+      setToken(data.token);
+      setUser(data.user);
+    }
+
     return data;
   };
 
