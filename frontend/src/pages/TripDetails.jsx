@@ -8,6 +8,7 @@ import { format, differenceInDays } from 'date-fns';
 import toast from 'react-hot-toast';
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import { Plane, Car, Bike, Bus, Train, Footprints, Ticket, ExternalLink } from 'lucide-react';
+import { createPortal } from 'react-dom';
 import './TripDetails.css';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -137,6 +138,18 @@ const TripDetails = () => {
       );
     }
   }, [activeTab]);
+
+  useEffect(() => {
+    if (showDeleteModal) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    // Cleanup to prevent body being stuck if component unmounts
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [showDeleteModal]);
 
   const loadTrip = async () => {
     try {
@@ -562,30 +575,30 @@ const TripDetails = () => {
               </div>
 
               <div className="map-estimates-grid">
-                 {getTransportMethods().map(method => {
-                    const Icon = method.icon;
-                    const canBook = BOOKABLE_TRANSPORTS.has(method.type.toLowerCase());
-                    return (
-                      <div key={method.type} className="estimate-card card">
-                        <div className="estimate-icon-wrap">
-                          <Icon size={22} strokeWidth={2.2} />
-                        </div>
-                        <div className="estimate-type">{method.type}</div>
-                        {canBook ? (
-                          <button
-                            className="estimate-book-btn"
-                            onClick={() => window.open(buildBookingUrl(method.type), '_blank', 'noopener,noreferrer')}
-                          >
-                            <Ticket size={13} />
-                            Book
-                            <ExternalLink size={12} />
-                          </button>
-                        ) : (
-                          <div className="estimate-note">Route preview only</div>
-                        )}
+                {getTransportMethods().map(method => {
+                  const Icon = method.icon;
+                  const canBook = BOOKABLE_TRANSPORTS.has(method.type.toLowerCase());
+                  return (
+                    <div key={method.type} className="estimate-card card">
+                      <div className="estimate-icon-wrap">
+                        <Icon size={22} strokeWidth={2.2} />
                       </div>
-                    );
-                  })}
+                      <div className="estimate-type">{method.type}</div>
+                      {canBook ? (
+                        <button
+                          className="estimate-book-btn"
+                          onClick={() => window.open(buildBookingUrl(method.type), '_blank', 'noopener,noreferrer')}
+                        >
+                          <Ticket size={13} />
+                          Book
+                          <ExternalLink size={12} />
+                        </button>
+                      ) : (
+                        <div className="estimate-note">Route preview only</div>
+                      )}
+                    </div>
+                  );
+                })}
               </div>
 
               <div className="map-embed-wrap card">
@@ -995,7 +1008,7 @@ const TripDetails = () => {
       </div>
 
       {/* ── Delete modal ── */}
-      {showDeleteModal && (
+      {showDeleteModal && createPortal(
         <div className="td-modal-overlay" onClick={() => setShowDeleteModal(false)}>
           <div className="td-modal card" onClick={e => e.stopPropagation()}>
             <div className="td-modal-icon">🗑️</div>
@@ -1013,7 +1026,8 @@ const TripDetails = () => {
               </button>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body // This teleports the modal to the body tag
       )}
     </div>
   );

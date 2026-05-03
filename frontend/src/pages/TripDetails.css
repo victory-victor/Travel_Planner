@@ -1462,17 +1462,33 @@
   position: fixed;
   top: 0;
   left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.75);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  z-index: 9999;
+  width: 100vw;
+  /* Force full viewport width */
+  height: 100vh;
+  /* Force full viewport height */
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+
+  /* This centers the modal regardless of scroll position */
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 16px;
-  animation: overlayFadeIn 0.2s ease;
+
+  z-index: 999;
+  /* Super high z-index */
+  padding: 20px;
+  overflow: hidden;
+  /* Prevent background scrolling while open */
+}
+
+/* Ensure the modal itself doesn't grow larger than the screen */
+.td-modal {
+  max-width: 400px;
+  width: 100%;
+  position: relative;
+  /* Inside the overlay, this stays centered */
+  z-index: 100000;
 }
 
 @keyframes overlayFadeIn {
