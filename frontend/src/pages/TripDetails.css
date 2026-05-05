@@ -525,6 +525,16 @@
   padding-bottom: 4px;
 }
 
+/* Time shown inline on mobile — hidden on desktop */
+.timeline-time-mobile {
+  display: none;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--primary);
+  letter-spacing: 0.04em;
+  margin-bottom: 4px;
+}
+
 .timeline-activity-header {
   display: flex;
   align-items: flex-start;
@@ -1459,36 +1469,27 @@
 
 /* ── Delete Modal ───────────────────────────── */
 .td-modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  /* Force full viewport width */
-  height: 100vh;
-  /* Force full viewport height */
-  background: rgba(0, 0, 0, 0.8);
+  /* Absolutely fixed to the screen — scroll position has zero effect */
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  /* Prevent any transform on parent elements from escaping the stacking context */
+  transform: none !important;
+  background: rgba(0, 0, 0, 0.78);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-
-  /* This centers the modal regardless of scroll position */
+  z-index: 999 !important;
   display: flex;
   align-items: center;
   justify-content: center;
-
-  z-index: 999;
-  /* Super high z-index */
   padding: 20px;
-  overflow: hidden;
-  /* Prevent background scrolling while open */
-}
-
-/* Ensure the modal itself doesn't grow larger than the screen */
-.td-modal {
-  max-width: 400px;
-  width: 100%;
-  position: relative;
-  /* Inside the overlay, this stays centered */
-  z-index: 100000;
+  /* Stop touch-scroll bleeding through on iOS */
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: auto;
+  touch-action: none;
+  animation: overlayFadeIn 0.2s ease;
 }
 
 @keyframes overlayFadeIn {
@@ -1640,47 +1641,102 @@
     justify-content: center;
   }
 
+  /* ── Itinerary mobile ── */
+  .itinerary-list {
+    gap: 16px;
+  }
+
   .itin-day-head {
-    padding: 12px 16px;
+    padding: 14px 16px 12px;
     gap: 8px;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+  }
+
+  .itin-day-badge {
+    grid-column: 1;
+    grid-row: 1;
+    font-size: 11px;
+    padding: 4px 12px;
   }
 
   .itin-day-head h3 {
+    grid-column: 1 / -1;
+    grid-row: 2;
     font-size: 0.95rem;
+    margin: 6px 0 0;
+    order: unset;
     width: 100%;
-    order: 3;
-    margin-top: 4px;
   }
 
   .itin-day-date {
+    grid-column: 3;
+    grid-row: 1;
     margin-left: 0;
     font-size: 11px;
+    white-space: nowrap;
   }
 
   .itin-timeline {
-    padding: 20px 12px;
+    padding: 16px 12px;
   }
 
+  /* Switch to 2-col: dot | content (hide the time column) */
   .timeline-item {
-    grid-template-columns: 50px 24px 1fr;
-    gap: 0 4px;
+    grid-template-columns: 20px 1fr;
+    gap: 0 10px;
   }
 
+  /* Hide the dedicated time column on mobile */
   .timeline-time {
-    font-size: 10px;
+    display: none;
+  }
+
+  /* Show inline time label inside content on mobile */
+  .timeline-time-mobile {
+    display: block;
+  }
+
+  .timeline-node {
+    grid-column: 1;
+    grid-row: 1 / 999;
+    padding-top: 4px;
   }
 
   .timeline-content {
-    padding-bottom: 18px;
+    grid-column: 2;
+    padding-bottom: 20px;
   }
 
+  .timeline-item:last-child .timeline-content {
+    padding-bottom: 4px;
+  }
+
+  /* Stack cost badge below the title on mobile */
   .timeline-activity-header {
-    flex-wrap: wrap;
-    gap: 6px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+    margin-bottom: 6px;
   }
 
   .timeline-activity-header h4 {
-    font-size: 13px;
+    font-size: 13.5px;
+    line-height: 1.35;
+  }
+
+  .timeline-cost {
+    font-size: 11px;
+    padding: 2px 8px;
+  }
+
+  .timeline-location {
+    font-size: 11.5px;
+  }
+
+  .timeline-desc {
+    font-size: 12.5px;
   }
 
   .map-estimates-grid {

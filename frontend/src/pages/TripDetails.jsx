@@ -514,6 +514,7 @@ const TripDetails = () => {
                               {i < day.activities.length - 1 && <div className="timeline-line" />}
                             </div>
                             <div className="timeline-content">
+                              <span className="timeline-time-mobile">{act.time}</span>
                               <div className="timeline-activity-header">
                                 <h4>{act.activity}</h4>
                                 {act.estimatedCost > 0 && (
