@@ -201,12 +201,18 @@
   font-weight: 700;
   color: var(--text-primary);
   margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .dropdown-email {
   font-size: 12px;
   color: var(--text-muted);
   margin: 2px 0 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .dropdown-divider {
@@ -244,6 +250,16 @@
 .dropdown-logout:hover {
   background: rgba(255, 101, 132, 0.1);
   color: #FF6584;
+}
+
+/* Delete account dropdown item */
+.dropdown-delete-account {
+  color: #EF4444;
+}
+
+.dropdown-delete-account:hover {
+  background: rgba(239, 68, 68, 0.1);
+  color: #EF4444;
 }
 
 /* Hamburger */
@@ -304,7 +320,6 @@
   z-index: 999;
   transform: translateX(100%);
   padding-top: 80px;
-  /* Space for navbar */
   display: none;
 }
 
@@ -348,6 +363,25 @@
   margin-top: 12px;
 }
 
+/* Delete account mobile link */
+.mobile-delete-account {
+  color: #EF4444 !important;
+  border-color: rgba(239, 68, 68, 0.2) !important;
+  background: rgba(239, 68, 68, 0.05) !important;
+  cursor: pointer;
+  width: 100%;
+  text-align: left;
+  font-size: 16px;
+  font-weight: 600;
+  font-family: var(--font-secondary);
+}
+
+.mobile-delete-account:hover {
+  background: rgba(239, 68, 68, 0.12) !important;
+  border-color: #EF4444 !important;
+}
+
+/* ── Responsive ─────────────────────────────── */
 @media (max-width: 768px) {
   .navbar-links {
     display: none;
@@ -369,67 +403,60 @@
     display: block;
   }
 
+  /* ── Mobile user profile card ── */
   .mobile-user-profile {
     display: flex;
     align-items: center;
-    gap: 16px;
-    padding: 20px;
+    gap: 12px;
+    padding: 14px 16px;
     background: rgba(255, 255, 255, 0.03);
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
-    margin: 16px 0;
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    margin: 12px 0;
+    /* CRITICAL: allow children to shrink/truncate properly */
+    min-width: 0;
+    overflow: hidden;
   }
 
+  /* Avatar: fixed size, NEVER shrinks */
+  .mobile-user-profile .navbar-user-circle {
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+  }
+
+  /* Text container: takes remaining space, clips overflow */
   .mobile-user-details {
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: 3px;
+    flex: 1;
+    min-width: 0;
+    /* allows flex child to shrink below content width */
+    overflow: hidden;
   }
 
   .mobile-user-name {
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 700;
     color: var(--text-primary);
     margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .mobile-user-email {
-    font-size: 13px;
+    font-size: 12px;
     color: var(--text-muted);
     margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 }
 
-/* Delete account dropdown item */
-.dropdown-delete-account {
-  color: #EF4444;
-}
-
-.dropdown-delete-account:hover {
-  background: rgba(239, 68, 68, 0.1);
-  color: #EF4444;
-}
-
-/* Delete account mobile link */
-.mobile-delete-account {
-  color: #EF4444 !important;
-  border-color: rgba(239, 68, 68, 0.2) !important;
-  background: rgba(239, 68, 68, 0.05) !important;
-  cursor: pointer;
-  width: 100%;
-  text-align: left;
-  font-size: 16px;
-  font-weight: 600;
-  font-family: var(--font-secondary);
-}
-
-.mobile-delete-account:hover {
-  background: rgba(239, 68, 68, 0.12) !important;
-  border-color: #EF4444 !important;
-}
-
-/* ── Delete confirmation modal ────────────────── */
+/* ── Delete confirmation modal ─────────────── */
 .delete-modal-overlay {
   position: fixed;
   inset: 0;
