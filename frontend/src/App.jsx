@@ -25,7 +25,15 @@ const ProtectedRoute = ({ children }) => {
 const PublicRoute = ({ children }) => {
   const { isAuthenticated, loading } = useAuth();
   if (loading) return <Loader />;
-  return !isAuthenticated ? children : <Navigate to="/dashboard" replace />;
+  if (isAuthenticated) {
+    // If user just signed up/logged in from an invitation link, redirect to join page
+    const pendingInvite = localStorage.getItem('wm_pending_invite');
+    if (pendingInvite) {
+      return <Navigate to={`/join/${pendingInvite}`} replace />;
+    }
+    return <Navigate to="/dashboard" replace />;
+  }
+  return children;
 };
 
 function ScrollToTop() {

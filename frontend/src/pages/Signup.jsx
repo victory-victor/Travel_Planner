@@ -69,7 +69,13 @@ const Signup = () => {
     try {
       await register(form.name, form.email, form.password);
       toast.success('Welcome to WanderMind! 🌍');
-      navigate('/dashboard');
+      // If user came from an invitation link, send them back to accept it
+      const pendingInvite = localStorage.getItem('wm_pending_invite');
+      if (pendingInvite) {
+        navigate(`/join/${pendingInvite}`);
+      } else {
+        navigate('/dashboard');
+      }
     } catch (err) {
       toast.error(err.response?.data?.message || 'Registration failed');
     } finally {

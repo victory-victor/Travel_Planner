@@ -101,6 +101,18 @@ const sendInvitationEmail = async ({
     htmlContent: html,
   };
 
+  const maskEmail = (email) => {
+    const [name, domain] = email.split("@");
+
+    // keep first 2 chars, mask the rest
+    const maskedName =
+      name.length > 2
+        ? name.slice(0, 2) + "*".repeat(name.length - 2)
+        : name[0] + "*";
+
+    return `${maskedName}@${domain}`;
+  };
+
   const response = await fetch('https://api.brevo.com/v3/smtp/email', {
     method: 'POST',
     headers: {
@@ -118,7 +130,9 @@ const sendInvitationEmail = async ({
     throw new Error('Email service failed: ' + (data.message || response.statusText));
   }
 
-  console.log(`📧 Email sent successfully to ${toEmail} | messageId: ${data.messageId}`);
+  console.log(
+    `📧 Email sent successfully to ${maskEmail(toEmail)} | messageId: ${data.messageId}`
+  );
   return data;
 };
 

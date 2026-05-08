@@ -22,6 +22,26 @@ const JoinTrip = () => {
     loadInvite();
   }, [token]);
 
+  // Auto-accept: fires when user returns to this page after completing login/signup.
+  // If they are now authenticated, the invitation is loaded, and the pending invite
+  // token in localStorage matches the current token, accept automatically.
+  useEffect(() => {
+    if (!isAuthenticated || !invitation || loading) return;
+    const pendingInvite = localStorage.getItem('wm_pending_invite');
+    if (pendingInvite === token) {
+      localStorage.removeItem('wm_pending_invite');
+      // Auto-accept the invitation seamlessly
+      inviteAPI.accept(token)
+        .then(({ data }) => {
+          toast.success('Welcome aboard! 🎉 Joining your trip...');
+          navigate(`/trips/${data.tripId}`);
+        })
+        .catch((err) => {
+          toast.error(err.response?.data?.message || 'Failed to join trip');
+        });
+    }
+  }, [isAuthenticated, invitation, loading, token, navigate]);
+
   useEffect(() => {
     if (!loading && cardRef.current) {
       const tl = gsap.timeline();
@@ -176,7 +196,13 @@ const JoinTrip = () => {
                   <div className="footer-meta">
                     {!isAuthenticated && (
                       <p className="login-hint">
-                        Already a member? <Link to="/login">Sign in</Link>
+                        Already a member?{' '}
+                        <Link
+                          to="/login"
+                          onClick={() => localStorage.setItem('wm_pending_invite', token)}
+                        >
+                          Sign in
+                        </Link>
                       </p>
                     )}
                     <p className="security-tag">
