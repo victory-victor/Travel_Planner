@@ -386,7 +386,7 @@ const Dashboard = () => {
           </div>
 
           <div className="filter-segments">
-            {['all', 'planning', 'confirmed', 'ongoing', 'completed'].map((f) => (
+            {['all', 'planning', 'confirmed', 'ongoing', 'completed', 'cancelled'].map((f) => (
               <button
                 key={f}
                 className={`segment-item ${filter === f ? 'active' : ''}`}
