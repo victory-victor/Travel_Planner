@@ -68,4 +68,12 @@ export const inviteAPI = {
   accept: (token) => API.post('/invites/accept', { token }),
 };
 
+// ── Chat ──────────────────────────────────────────
+export const chatAPI = {
+  getHistory: (tripId, params) => API.get(`/chat/${tripId}`, { params }),
+  sendMessage: (tripId, data) => API.post(`/chat/${tripId}`, data),
+  reactToMessage: (msgId, emoji) => API.patch(`/chat/message/${msgId}/react`, { emoji }),
+  deleteMessage: (msgId) => API.delete(`/chat/message/${msgId}`),
+};
+
 export default API;

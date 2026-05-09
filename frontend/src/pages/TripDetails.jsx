@@ -9,6 +9,7 @@ import toast from 'react-hot-toast';
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 import { Plane, Car, Bike, Bus, Train, Footprints, Ticket, ExternalLink } from 'lucide-react';
 import { createPortal } from 'react-dom';
+import GroupChat from '../components/common/GroupChat';
 import './TripDetails.css';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -39,6 +40,7 @@ const TABS = [
   { id: 'itinerary', label: 'Itinerary', icon: '🗓️' },
   { id: 'map', label: 'Travel', icon: '✈️' },
   { id: 'members', label: 'Members', icon: '👥' },
+  { id: 'groupchat', label: 'Group Chat', icon: '💬' },
   { id: 'chat', label: 'AI Assistant', icon: '🤖' },
   { id: 'packing', label: 'Packing', icon: '🎒' },
   { id: 'budget', label: 'Budget', icon: '💰' },
@@ -745,6 +747,13 @@ const TripDetails = () => {
                   )}
                 </div>
               </div>
+            </div>
+          )}
+
+          {/* ───── GROUP CHAT ───── */}
+          {activeTab === 'groupchat' && (
+            <div className="tab-panel">
+              <GroupChat tripId={id} trip={trip} />
             </div>
           )}
 
