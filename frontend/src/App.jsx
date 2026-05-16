@@ -29,6 +29,8 @@ const PublicRoute = ({ children }) => {
     // If user just signed up/logged in from an invitation link, redirect to join page
     const pendingInvite = localStorage.getItem('wm_pending_invite');
     if (pendingInvite) {
+      // Clear immediately so stale tokens don't cause redirect loops
+      localStorage.removeItem('wm_pending_invite');
       return <Navigate to={`/join/${pendingInvite}`} replace />;
     }
     return <Navigate to="/dashboard" replace />;
@@ -63,7 +65,7 @@ function AppRoutes() {
         <Route path="/create-trip" element={<ProtectedRoute><CreateTrip /></ProtectedRoute>} />
         <Route path="/trips/:id" element={<ProtectedRoute><TripDetails /></ProtectedRoute>} />
         <Route path="/analytics" element={<ProtectedRoute><Analytics /></ProtectedRoute>} />
-        <Route path="/join/:token" element={<JoinTrip />} />
+
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </>

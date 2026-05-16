@@ -66,6 +66,8 @@ const JoinTrip = () => {
       const { data } = await inviteAPI.get(token);
       setInvitation(data.invitation);
     } catch (err) {
+      // Clean up stale pending invite so it doesn't keep redirecting here
+      localStorage.removeItem('wm_pending_invite');
       setError(err.response?.data?.message || 'Invitation not found or expired');
     } finally {
       setLoading(false);
@@ -111,11 +113,59 @@ const JoinTrip = () => {
               <p>Fetching your adventure details...</p>
             </div>
           ) : error ? (
-            <div className="join-error-card card" ref={cardRef}>
-              <div className="error-visual">⚠️</div>
-              <h2>Oops! Something went wrong</h2>
-              <p>{error}</p>
-              <Link to="/" className="btn btn-primary">Return to WanderMind</Link>
+            <div className="join-error-card" ref={cardRef}>
+              <div className="error-card-accent" />
+              <div className="error-card-glow" />
+              
+              <div className="error-icon-wrap">
+                <div className="error-icon-ring">
+                  <div className="error-icon-inner">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <circle cx="12" cy="12" r="10" />
+                      <line x1="15" y1="9" x2="9" y2="15" />
+                      <line x1="9" y1="9" x2="15" y2="15" />
+                    </svg>
+                  </div>
+                </div>
+              </div>
+
+              <div className="error-text-block">
+                <h2>Invitation Unavailable</h2>
+                <p className="error-description">{error}</p>
+                <p className="error-hint">This invitation may have expired, already been used, or the link could be incorrect.</p>
+              </div>
+
+              <div className="error-actions">
+                {isAuthenticated ? (
+                  <Link to="/dashboard" className="error-btn error-btn-primary">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                      <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                      <polyline points="9 22 9 12 15 12 15 22" />
+                    </svg>
+                    Go to Dashboard
+                  </Link>
+                ) : (
+                  <Link to="/" className="error-btn error-btn-primary">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                      <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
+                      <polyline points="9 22 9 12 15 12 15 22" />
+                    </svg>
+                    Go to Home
+                  </Link>
+                )}
+                <button onClick={() => window.location.reload()} className="error-btn error-btn-secondary">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                    <polyline points="23 4 23 10 17 10" />
+                    <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10" />
+                  </svg>
+                  Try Again
+                </button>
+              </div>
+
+              <div className="error-footer-tag">
+                <span className="error-lock">🔒</span>
+                <span>Secure Invitation System • WanderMind</span>
+              </div>
             </div>
           ) : (
             <div className="join-main-card card" ref={cardRef}>

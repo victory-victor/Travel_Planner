@@ -128,6 +128,7 @@ const Login = () => {
       // If user came from an invitation link, send them back to accept it
       const pendingInvite = localStorage.getItem('wm_pending_invite');
       if (pendingInvite) {
+        localStorage.removeItem('wm_pending_invite');
         navigate(`/join/${pendingInvite}`);
       } else {
         navigate('/dashboard');
